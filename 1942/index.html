@@ -2,6 +2,9 @@
 
 <head>
     <title>1942 Game</title>
+    <script>
+        src = "https://code.jquery.com/jquery-1.10.2.js"
+    </script>
 
     <style type="text/css">
         body {
@@ -37,13 +40,14 @@
             height: 28px;
             position: absolute;
         }
-        /* .explode {
+        
+        .explode {
             background: url('1942.gif');
             background-position: -84px -37px;
             width: 28px;
             height: 28px;
             position: absolute;
-        } */
+        }
         
         .bullet {
             background: url('1942.gif');
@@ -81,7 +85,7 @@
 
     <script>
         var score = 0;
-
+        var explode = [];
         var hero = {
             x: 400,
             y: 450
@@ -120,6 +124,10 @@
         function displayEnemies() {
             var output = '';
             for (i = 0; i < enemies.length; i++) {
+                if (i % 3 == 0) {
+                    output += "<div class='enemy2' style='top:" + enemies[i].y + 'px; left:' + enemies[i].x + "px;'></div>";
+
+                }
                 output += "<div class='enemy1' style='top:" + enemies[i].y + 'px; left:' + enemies[i].x + "px;'></div>";
 
             }
@@ -168,10 +176,18 @@
             moveBullets();
             displayBullets();
             detectCollision();
-            detectAirplainCollision();
+            if (detectAirplainCollision()) {
+                score = score - 50;
+                if (score < 0) {
+                    score = "Game OVER!";
+                    alert("you loooose!")
+                    clearInterval(myGame);
+                }
+            }
             displayScore();
 
         }
+
 
         function myStopFunction() {
             clearTimeout(gameLoop);
@@ -180,10 +196,9 @@
         function detectCollision() {
             for (var i = 0; i < bullets.length; i++) {
                 for (j = 0; j < enemies.length; j++) {
-                    if (Math.abs(bullets[i].x - enemies[j].x) < 6 && Math.abs(bullets[i].y - enemies[j].y) < 6) {
-                        score += 10;
+                    if (Math.abs(bullets[i].x - enemies[j].x) < 10 && Math.abs(bullets[i].y - enemies[j].y) < 10) {
+                        score += 20;
                         enemies[j] = enemies[enemies.length - 1];
-                        document.getElementById('enemies').style.backgroundPosition = "-84px -37px";
                         enemies.pop();
                     }
                 }
@@ -192,17 +207,16 @@
 
         function detectAirplainCollision() {
             for (i = 0; i < enemies.length; i++) {
-                if (Math.abs(enemies[i].x - hero.x) < 8 && Math.abs(enemies[i].y - hero.y) < 8) {
-                    score -= 200;
-                    // if (score < 0) {
-                    //     // alert("GAME OVER!");
-                    // }
+                if (Math.abs(enemies[i].x - hero.x) < 10 && Math.abs(enemies[i].y - hero.y) < 10) {
+                    console.log("pplane hit")
+                    return true;
                 }
             }
         }
+        detectAirplainCollision();
 
 
-        setInterval(gameLoop, 60);
+        var myGame = setInterval(gameLoop, 60);
 
         function makeSound() {
 
