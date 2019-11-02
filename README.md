@@ -19,3 +19,6 @@ Features for the Pac-Man Game
     5.Get a ghost to show up (the ghost does not have to move yet). When Pacman meets the ghost, have Pacman lose its life.
     6.Get the ghost to move around in random directions.
     7.Get two Pacmans to show up and move! (use one keyboard to move 2 Pacmans)
+    
+## WordWinner
+##### In this project I builded a speed typing game in JavaScript. Didn't use any frameworks or libraries.
